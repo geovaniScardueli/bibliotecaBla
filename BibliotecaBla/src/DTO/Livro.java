@@ -5,21 +5,69 @@
  */
 package DTO;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  *
  * @author tads
  */
-public class Livro {
+public class Livro implements Serializable{
+
     int codigoDeBarras;
     int idLivro;
     int exemplar;
     LocalDate dataAquisicaoExemplar;
     LocalDate dataCadastroSistema;
     String dadosLivro;
-    String classificacao; 
+    String classificacao;
     String areaConhecimento;
+    String autor;
+    String titulo;
+    String ano;
+    Long isbn;
+    String editora;
+    int paginas;
+
+    public String getAno() {
+        return ano;
+    }
+
+    public void setAno(String ano) {
+        this.ano = ano;
+    }
+
+    public Long getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(Long isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getEditora() {
+        return editora;
+    }
+
+    public void setEditora(String editora) {
+        this.editora = editora;
+    }
+
+    public int getPaginas() {
+        return paginas;
+    }
+
+    public void setPaginas(int paginas) {
+        this.paginas = paginas;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
     public int getCodigoDeBarras() {
         return codigoDeBarras;
@@ -84,6 +132,13 @@ public class Livro {
     public void setAreaConhecimento(String areaConhecimento) {
         this.areaConhecimento = areaConhecimento;
     }
-    
-    
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+
 }
