@@ -24,3 +24,12 @@ ISBN long,
 EDITORA varchar(255),
 PAGINAS int
 );
+
+
+create table emprestimo(
+NR_SEQUENCIA int auto_increment primary key,
+LIVRO varchar(100),
+DATA_EMPRESTIMO date,
+DATA_DEVOLUCAO date,
+USUARIO varchar(100)
+);

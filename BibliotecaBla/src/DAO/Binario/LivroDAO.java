@@ -5,7 +5,10 @@
  */
 package DAO.Binario;
 
+import DTO.Livro;
 import Utilitarios.Utilitarios;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,30 +21,25 @@ import java.util.HashMap;
  */
 public class LivroDAO {
 
-    /**
-     * Importa o CSV e já salva em arquivos separadamente
-     *
-     */
-    public void importarCSV() {
-        new Utilitarios("binario").importar();
+    public void realizaEmprestimo(String nome, int barraLivro) {
+        
     }
 
-    /**
-     * Procura um livro especifico
-     * @param barras código de barras do livro
-     * @return HashMap contendo o livro
-     */
-    public HashMap buscarLivro(int barras) {
-        
-        return null;
-    }
-    
-    public void realizaEmprestimo(String nome, int barraLivro) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(sdf.format(new Date(System.currentTimeMillis())),formatter);
-        LocalDate dataDevolucao = date.plusDays(15);
-        System.out.println(dataDevolucao.format(formatter));
+    public void incluiLivro(Livro param) {
+        try {
+        String path = System.getProperty("user.home");
+        String barra = System.getProperty("file.separator");
+        HashMap gravar = new HashMap();
+        gravar.put(param.getIdLivro(), param);
+        ObjectOutputStream binar = new ObjectOutputStream(new FileOutputStream(path + barra + "NetBeansProjects"
+                + barra + "bibliotecaBla" + barra + "BibliotecaBla" + barra + "src" + barra
+                + "livroCSV" + barra + "binario" + barra + param.getIdLivro() + "-" + param.getCodigoDeBarras() + ".ser"));
+        binar.writeObject(gravar);
+        binar.flush();
+        binar.close();
+        } catch(Exception ex) {
+            System.out.println("Erro ao adicionar livro binario");
+        }
     }
 
 }
