@@ -10,8 +10,11 @@ import Utilitarios.ConexaoDao;
 import Utilitarios.Utilitarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  *
@@ -52,24 +55,70 @@ public class LivroDAO extends ConexaoDao {
             System.out.println("Erro insert emprestimo: " + ex);
         }
     }
-    
-    
-    public void realizaEmprestimo(String nomeLivro, String usuario) {
+
+    public void realizaEmprestimo(int codBarra, String usuario) {
         try {
-        String sql = "insert into emprestimo(LIVRO, DATA_EMPRESTIMO, DATA_DEVOLUCAO, USUARIO) values (?,?,?,?);";
-        Connection conn = novaConexao();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, parametros.get("LIVRO").toString());
-        pstmt.setDate(2, java.sql.Date.valueOf((LocalDate)parametros.get("DATA_EMPRESTIMO")));
-        pstmt.setDate(3, java.sql.Date.valueOf((LocalDate)parametros.get("DATA_DEVOLUCAO")));
-        pstmt.setString(4, parametros.get("USUARIO").toString());
+            String retorno = podeEmprestar(codBarra);
+            if (!"".equals(retorno)) {
+                System.out.println(retorno);
+                return;
+            }
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate date = LocalDate.parse(sdf.format(new Date(System.currentTimeMillis())), formatter);
+            LocalDate dataDevolucao = date.plusDays(15);
 
-        pstmt.executeUpdate();
-        pstmt.close();
+            Connection conn = novaConexao();
+            
+            String sql = "insert into emprestimo(COD_BARRAS, DATA_EMPRESTIMO, DATA_DEVOLUCAO, USUARIO) values (?,?,?,?);";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, codBarra);
+            pstmt.setDate(2, java.sql.Date.valueOf(date));
+            pstmt.setDate(3, java.sql.Date.valueOf(dataDevolucao));
+            pstmt.setString(4, usuario);
 
-        conn.close();
+            pstmt.executeUpdate();
+            pstmt.close();
+            
+            conn.close();
         } catch (Exception ex) {
             System.out.println("erro ao realizar emprestimo banco");
         }
+    }
+    
+    private String podeEmprestar(int codBarras) throws Exception {
+        Connection conn = novaConexao();
+        int registros = 0;
+        
+        String sql = "select count(1) resultado from emprestimo where COD_BARRAS = ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, codBarras);
+        
+        ResultSet rs = pst.executeQuery();
+        while (rs.next()) {
+            registros = rs.getInt("RESULTADO");
+        }
+        pst.close();
+        
+        if (registros > 0) {
+            return "Este livro já foi emprestado";
+        }
+        
+        String sql2 = "select count(1) resultado from livro where CODIGO_BARRAS = ?";
+        PreparedStatement pst2 = conn.prepareStatement(sql2);
+        pst2.setInt(1, codBarras);
+        
+        rs = pst2.executeQuery();
+        while (rs.next()) {
+            registros = rs.getInt("RESULTADO");
+        }
+        pst2.close();
+        
+        if (registros == 0) {
+            return "Nao existe este livro";
+        }
+        
+        return "";
     }
 }

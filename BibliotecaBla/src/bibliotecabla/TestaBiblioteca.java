@@ -5,8 +5,8 @@
  */
 package bibliotecabla;
 
-import DAO.Banco.LivroDAO;
-//import DAO.Binario.LivroDAO;
+//import DAO.Banco.LivroDAO;
+import DAO.Binario.LivroDAO;
 import DTO.Livro;
 
 /**
@@ -20,11 +20,12 @@ public class TestaBiblioteca {
         LivroDAO dao = new LivroDAO();
         
         // incluir um livro
-        Livro livro1 = new Livro();
-        livro1.setTitulo("Java");
-        dao.incluiLivro(livro1);
+//        Livro livro1 = new Livro();
+//        livro1.setTitulo("Java");
+//        dao.incluiLivro(livro1);
         
-        
+//        Livro aeo = dao.buscaLivro("97475904");
+//        System.out.println("bla");
     }
     
 }

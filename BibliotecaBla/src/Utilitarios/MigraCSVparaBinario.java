@@ -5,9 +5,7 @@
  */
 package Utilitarios;
 
-import DAO.Banco.LivroDAO;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
 
 /**
  *
@@ -21,12 +19,11 @@ public class MigraCSVparaBinario {
     public static void main(String[] args) {
 
         //funcionando
-        LivroDAO bin = new LivroDAO();
-        bin.importarCSV();
-//        File fil = new File("/local/home/tads/NetBeansProjects/");
-//        File afile[] = fil.listFiles();
-//        System.out.println(afile[0].getName());
-//        new LivroDAO().realizaEmprestimo("bla", 0);
+//        Utilitarios utils = new Utilitarios("binario");
+//        utils.importar();
+        File fil = new File("/local/home/tads/informacoes/arquivos/");
+        File afile[] = fil.listFiles();
+        System.out.println(afile[0].getName());
     }
     
 }

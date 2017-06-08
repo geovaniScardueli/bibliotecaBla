@@ -27,7 +27,7 @@ PAGINAS int
 
 
 create table emprestimo(
-NR_SEQUENCIA int auto_increment primary key,
+COD_BARRAS int primary key,
 LIVRO varchar(100),
 DATA_EMPRESTIMO date,
 DATA_DEVOLUCAO date,
