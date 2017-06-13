@@ -6,8 +6,7 @@
 package bibliotecabla;
 
 //import DAO.Banco.LivroDAO;
-import DAO.Binario.LivroDAO;
-import DTO.Livro;
+import DAO.Banco.LivroDAO;
 
 /**
  *
@@ -16,16 +15,32 @@ import DTO.Livro;
 public class TestaBiblioteca {
     
     public static void main(String[] args) {
-        
+        try {
         LivroDAO dao = new LivroDAO();
         
+        // testa um emprestimo
+        
+        } catch (Exception ex) {
+            System.out.println("erro ao fazer um emprestimo" + ex);
+        }
+        // insere um livro
+        
+        
+        // cria um usuario
+        
+        
+        // tenta pegar um livro que jah estah emprestado
+        
+        
+        
+        
+        //dao.realizaEmprestimo(9999, "Scarai");
+        //dao.devolverLivro(97475904);
         // incluir um livro
 //        Livro livro1 = new Livro();
 //        livro1.setTitulo("Java");
 //        dao.incluiLivro(livro1);
         
-//        Livro aeo = dao.buscaLivro("97475904");
-//        System.out.println("bla");
     }
     
 }

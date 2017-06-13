@@ -26,40 +26,32 @@ public class LivroDAO {
     private final String barra = System.getProperty("file.separator");
     private final String path = System.getProperty("user.home");
 
-    public void incluiLivro(Livro param) {
-        try {
-            HashMap gravar = new HashMap();
-            gravar.put(param.getIdLivro(), param);
-            gravarArquivo(getCaminhoLivros(param.getIdLivro() + "-" + param.getCodigoDeBarras() + ".ser"), gravar);
-        } catch (Exception ex) {
-            System.out.println("Erro ao adicionar livro binario");
-        }
+    public String incluiLivro(Livro param) throws Exception {
+        HashMap gravar = new HashMap();
+        gravar.put(param.getIdLivro(), param);
+        gravarArquivo(getCaminhoLivros(param.getIdLivro() + "-" + param.getCodigoDeBarras() + ".ser"), gravar);
+        return "Livro incluido com sucesso";
     }
 
-    public void realizaEmprestimo(int codBarra, String usuario) {
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate date = LocalDate.parse(sdf.format(new Date(System.currentTimeMillis())), formatter);
-            LocalDate dataDevolucao = date.plusDays(15);
-            Livro empresta = buscaLivro(codBarra);
+    public String realizaEmprestimo(int codBarra, String usuario) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(sdf.format(new Date(System.currentTimeMillis())), formatter);
+        LocalDate dataDevolucao = date.plusDays(15);
+        Livro empresta = buscaLivro(codBarra);
 
-            if (empresta == null) {
-                System.out.println("Não existe este livro cadastrada");
-                return;
-            }
-
-            HashMap gravar = new HashMap();
-            gravar.put("USUARIO", usuario);
-            gravar.put("LIVRO", empresta);
-            gravar.put("DATA_DEVOLUCAO", dataDevolucao);
-            gravar.put("DATA_EMPRESTIMO", date);
-
-            gravarArquivo(getCaminhoEmprestimo(usuario + "-" + empresta.getCodigoDeBarras() + ".ser"), gravar);
-
-        } catch (Exception ex) {
-            System.out.println("erro ao realizar emprestimo binario");
+        if (empresta == null) {
+            return "Não existe este livro cadastrado";
         }
+
+        HashMap gravar = new HashMap();
+        gravar.put("USUARIO", usuario);
+        gravar.put("LIVRO", empresta);
+        gravar.put("DATA_DEVOLUCAO", dataDevolucao);
+        gravar.put("DATA_EMPRESTIMO", date);
+
+        gravarArquivo(getCaminhoEmprestimo(usuario + "-" + empresta.getCodigoDeBarras() + ".ser"), gravar);
+        return "Realizado emprestimo com sucesso";
     }
 
     private String getCaminhoLivros(String nomeArquivo) {
@@ -70,45 +62,36 @@ public class LivroDAO {
         return path + barra + "informacoes" + barra + "emprestimo" + barra + nomeArquivo;
     }
 
-    private Livro buscaLivro(int codBarras) {
+    private Livro buscaLivro(int codBarras) throws Exception {
         Livro retorno = null;
-        try {
-            File fil = new File(getCaminhoLivros(""));
-            File afile[] = fil.listFiles();
-            for (File temp : afile) {
-                String barras = temp.getName().split("-")[1].replaceAll(".ser", "");
-                if (barras.equals(codBarras + "")) {
-                    ObjectInputStream imput = new ObjectInputStream(new FileInputStream(temp));
-                    HashMap livro = (HashMap) imput.readObject();
-                    retorno = (Livro) livro.get(Integer.parseInt(temp.getName().split("-")[0]));
-                    temp.delete();
-                    break;
-                }
+        File fil = new File(getCaminhoLivros(""));
+        File afile[] = fil.listFiles();
+        for (File temp : afile) {
+            String barras = temp.getName().split("-")[1].replaceAll(".ser", "");
+            if (barras.equals(codBarras + "")) {
+                ObjectInputStream imput = new ObjectInputStream(new FileInputStream(temp));
+                HashMap livro = (HashMap) imput.readObject();
+                retorno = (Livro) livro.get(Integer.parseInt(temp.getName().split("-")[0]));
+                temp.delete();
+                break;
             }
-        } catch (Exception ex) {
-            System.out.println("Erro ao buscar um livro");
         }
         return retorno;
     }
 
-    public void devolverLivro(int codBarra) {
-        try {
-            Livro livro = estaEmprestado(codBarra);
-            if (livro == null) {
-                System.out.println("Este livro não está emprestado");
-                return;
-            }
-
-            HashMap gravar = new HashMap();
-            gravar.put(livro.getIdLivro(), livro);
-            gravarArquivo(getCaminhoLivros(livro.getIdLivro() + "-" + livro.getCodigoDeBarras() + ".ser"), gravar);
-            
-        } catch (Exception e) {
-            System.out.println("erro ao devolver livro binario");
+    public String devolverLivro(int codBarra) throws Exception {
+        Livro livro = buscaLivroEmprestimo(codBarra);
+        if (livro == null) {
+            return "Este livro não está emprestado";
         }
+
+        HashMap gravar = new HashMap();
+        gravar.put(livro.getIdLivro(), livro);
+        gravarArquivo(getCaminhoLivros(livro.getIdLivro() + "-" + livro.getCodigoDeBarras() + ".ser"), gravar);
+        return "Livro Devolvido com sucesso";
     }
 
-    private Livro estaEmprestado(int codBarras) throws Exception {
+    private Livro buscaLivroEmprestimo(int codBarras) throws Exception {
         Livro retorno = null;
         File fil = new File(getCaminhoEmprestimo(""));
         File afile[] = fil.listFiles();

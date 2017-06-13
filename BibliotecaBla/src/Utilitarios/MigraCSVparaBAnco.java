@@ -9,16 +9,12 @@ package Utilitarios;
  *
  * @author tads
  */
-public class MigraCSVparaBinario {
-
-    /**
-     * @param args the command line arguments
-     */
+public class MigraCSVparaBAnco {
+    
     public static void main(String[] args) {
 
         // importar a tabela csv para binário
-        Utilitarios utils = new Utilitarios("binario");
+        Utilitarios utils = new Utilitarios("banco");
         utils.importar();
     }
-    
 }

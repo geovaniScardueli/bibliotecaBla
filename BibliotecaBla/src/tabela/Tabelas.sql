@@ -28,7 +28,6 @@ PAGINAS int
 
 create table emprestimo(
 COD_BARRAS int primary key,
-LIVRO varchar(100),
 DATA_EMPRESTIMO date,
 DATA_DEVOLUCAO date,
 USUARIO varchar(100)
