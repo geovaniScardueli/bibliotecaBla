@@ -15,6 +15,19 @@ import DAO.Binario.LivroDAO;
 public class TestaBiblioteca {
 
     public static void main(String[] args) {
+        
+        /*
+        Criei arquivos separados para todos os livros, ou seja, cada livro
+        é um novo aruivo isso inclui os emprestimos também. Para isso existem 
+        duas pastas uma para representar todos os livros "todos os arquivos.png"
+        e outra pasta para os emprestimos "todos os do emprestimo.png", sendo assim
+        ao realizar um emprestimo e deleto o livro da daspa do livro e adicionado
+        na pasta do emprestimo, vice-versa ao devolver ele.
+        
+        OBS: isto é somente para binário;
+        */
+        
+        
         LivroDAO dao = new LivroDAO();
         try {
             // testa um emprestimo

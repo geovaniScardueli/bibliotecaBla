@@ -5,8 +5,8 @@
  */
 package testes;
 
+import DAO.Binario.RelatorioDAO;
 //import DAO.Banco.RelatorioDAO;
-import DAO.Banco.RelatorioDAO;
 /**
  *
  * @author tads
